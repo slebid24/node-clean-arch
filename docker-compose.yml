@@ -1,0 +1,54 @@
+# version: '3'
+
+# services:
+#   backend-app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     image: your-backend-app:latest
+#     restart: unless-stopped
+#     labels:
+#       - "traefik.enable=true"
+#       - "traefik.http.routers.backend-app.rule=Host(`backend-domain.com`)"
+#       - "traefik.http.routers.backend-app.entrypoints=websecure"
+#       - "traefik.http.routers.backend-app.tls.certresolver=myresolver"
+#     networks:
+#       - web
+
+#   traefik:
+#     image: traefik:v2.3
+#     command:
+#       - "--log.level=DEBUG"
+#       - "--api.insecure=true"
+#       - "--providers.docker=true"
+#       - "--entrypoints.web.address=:80"
+#       - "--entrypoints.websecure.address=:443"
+#       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+#       - "--certificatesresolvers.myresolver.acme.email=your-email@example.com"
+#       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#       - "8080:8080"
+#     volumes:
+#       - "/var/run/docker.sock:/var/run/docker.sock"
+#       - "./letsencrypt:/letsencrypt"
+#     networks:
+#       - web
+
+# networks:
+#   web:
+#     external: true
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
